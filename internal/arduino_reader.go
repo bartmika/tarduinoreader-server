@@ -77,38 +77,58 @@ func (ar *ArduinoReader) GetTimeSeriesData() []*pb.PolledTimeSeriesDatum {
 			return nil
 		}
 
-		// log.Println(d) // For debugging purposes only.
-
-		//TODO: Add label for unit of measure.
-
+		// Generate our labels.
+		labels := []*pb.PolledLabel{}
+		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.HumidityUnit})
 		htsd := &pb.PolledTimeSeriesDatum{
 			Metric:"humidity",
 			Value: float64(d.HumidityValue),
+			Labels: labels,
 			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
 		}
+
+		labels = []*pb.PolledLabel{}
+		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.TemperatureUnit})
 		ttsd := &pb.PolledTimeSeriesDatum{
 			Metric:"temperature",
 			Value: float64(d.TemperatureValue),
+			Labels: labels,
 			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
 		}
+
+		labels = []*pb.PolledLabel{}
+		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.PressureUnit})
 		ptsd := &pb.PolledTimeSeriesDatum{
 			Metric:"pressure",
 			Value: float64(d.PressureValue),
+			Labels: labels,
 			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
 		}
+
+		labels = []*pb.PolledLabel{}
+		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.TemperatureBackupUnit})
 		tbtsd := &pb.PolledTimeSeriesDatum{
 			Metric:"temperature_backup",
 			Value: float64(d.TemperatureBackupValue),
+			Labels: labels,
 			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
 		}
+
+		labels = []*pb.PolledLabel{}
+		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.AltitudeUnit})
 		atsd := &pb.PolledTimeSeriesDatum{
 			Metric:"altitude",
 			Value: float64(d.AltitudeValue),
+			Labels: labels,
 			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
 		}
+
+		labels = []*pb.PolledLabel{}
+		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.IlluminanceUnit})
 		itsd := &pb.PolledTimeSeriesDatum{
 			Metric:"illuminance",
 			Value: float64(d.IlluminanceValue),
+			Labels: labels,
 			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
 		}
 
