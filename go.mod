@@ -1,4 +1,4 @@
-module github.com/bartmika/tarduinoreader-server
+module github.com/bartmika/telemetry-server
 
 go 1.16
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/bartmika/tarduinoreader-server/cmd"
+	"github.com/bartmika/telemetry-server/cmd"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "tarduinoreader-server",
+	Use:   "telemetry-server",
 	Short: "Serve time-series data",
 	Long:  `Serve time-series data from a connected Arduino device with an attached 'SparkFun Weather Shield' device over gRPC.`,
 	Run: func(cmd *cobra.Command, args []string) {

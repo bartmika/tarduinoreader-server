@@ -1,4 +1,4 @@
-# tarduinoreader-server
+# telemetry-server
 
 ## Overview
 
@@ -29,14 +29,14 @@ You must have the following installed before proceeding. If you are missing any 
 3. Download the source code, build and install the application.
 
     ```
-    GO111MODULE=on go get -u github.com/bartmika/tarduinoreader-server
+    GO111MODULE=on go get -u github.com/bartmika/telemetry-server
     ```
 
 ## Usage
 Run our application.
 
 ```bash
-serialreader-server --port=50052 --arduinoDevicePath="/dev/cu.usbmodem14201"
+$GOBIN/telemetry-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956"
 ```
 
 If you see a message saying ``gRPC server is running.`` then the application has been successfully started.
