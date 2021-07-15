@@ -2,17 +2,11 @@
 
 ## Overview
 
-The purpose of this application is to provide a remote procedure call (gRPC) interface over an external Arduino device with a [SparkFun Weather Shield (DEV-13956)](https://github.com/sparkfun/Weather_Shield).
+The purpose of this server is to provide a remote procedure call (gRPC) interface over an external Arduino device(with a shield); more specifically, this application implements the [`Telemetry`](https://github.com/bartmika/tpoller-server/blob/master/proto/telemetry.proto) gRPC service definition so as long as you implement that protocol then you can access the time-series data.
 
-Supports collection of multiple time-series data from 6 different sensors and the following features:
+Currently this server only supports the following shield:
 
-* Temperature
-* Humidity
-* Pressure
-* Altitude
-* Illuminance
-* Supports `JSON` formatted outputs
-* Powered by open-source hardware and software!
+* [SparkFun Weather Shield (DEV-13956)](https://github.com/sparkfun/Weather_Shield).
 
 ## Prerequisites
 
