@@ -3,13 +3,13 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"time"
-	"io"
 
+	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
-	"github.com/golang/protobuf/ptypes/empty"
 	// "google.golang.org/grpc/credentials"
 
 	pb "github.com/bartmika/tpoller-server/proto"
@@ -33,14 +33,14 @@ func doGetData() {
 	}
 
 	// Set up our protocol buffer interface.
-	client := pb.NewTPollerClient(conn)
+	client := pb.NewTelemetryClient(conn)
 	defer conn.Close()
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
 	// Perform our gRPC request.
-	stream, err := client.PollTimeSeriesData(ctx, &empty.Empty{})
+	stream, err := client.PollTelemeter(ctx, &empty.Empty{})
 	if err != nil {
 		log.Fatalf("could not poll time series data: %v", err)
 	}

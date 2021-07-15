@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	tspb "github.com/golang/protobuf/ptypes/timestamp"
 	pb "github.com/bartmika/tpoller-server/proto"
+	tspb "github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/tarm/serial"
 )
 
@@ -40,7 +40,7 @@ type SparkFunWeatherShieldTimeSeriesData struct {
 
 // The abstraction of the `SparkFun Weather Shield` reader.
 type ArduinoReader struct {
-	serialPort *serial.Port
+	serialPort     *serial.Port
 	shieldHardware string
 }
 
@@ -59,7 +59,7 @@ func NewArduinoReader(devicePath string, arduinoShield string) *ArduinoReader {
 	// able to make calls to the external sensors.
 	log.Printf("READER: Waiting for Arduino external sensors to warm up")
 	ar := &ArduinoReader{
-		serialPort: s,
+		serialPort:     s,
 		shieldHardware: arduinoShield,
 	}
 	ar.GetTimeSeriesData()
@@ -69,7 +69,7 @@ func NewArduinoReader(devicePath string, arduinoShield string) *ArduinoReader {
 	return ar
 }
 
-func (ar *ArduinoReader) GetTimeSeriesData() []*pb.PolledTimeSeriesDatum {
+func (ar *ArduinoReader) GetTimeSeriesData() []*pb.TelemetryDatum {
 	if ar.shieldHardware == SPARKFUN_WEATHER_SHIELD {
 
 		d := ar.getSparkFunWeatherShieldData()
@@ -78,61 +78,61 @@ func (ar *ArduinoReader) GetTimeSeriesData() []*pb.PolledTimeSeriesDatum {
 		}
 
 		// Generate our labels.
-		labels := []*pb.PolledLabel{}
-		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.HumidityUnit})
-		htsd := &pb.PolledTimeSeriesDatum{
-			Metric:"humidity",
-			Value: float64(d.HumidityValue),
-			Labels: labels,
-			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
+		labels := []*pb.TelemetryLabel{}
+		labels = append(labels, &pb.TelemetryLabel{Name: "unit", Value: d.HumidityUnit})
+		htsd := &pb.TelemetryDatum{
+			Metric:    "humidity",
+			Value:     float64(d.HumidityValue),
+			Labels:    labels,
+			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos: 0},
 		}
 
-		labels = []*pb.PolledLabel{}
-		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.TemperatureUnit})
-		ttsd := &pb.PolledTimeSeriesDatum{
-			Metric:"temperature",
-			Value: float64(d.TemperatureValue),
-			Labels: labels,
-			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
+		labels = []*pb.TelemetryLabel{}
+		labels = append(labels, &pb.TelemetryLabel{Name: "unit", Value: d.TemperatureUnit})
+		ttsd := &pb.TelemetryDatum{
+			Metric:    "temperature",
+			Value:     float64(d.TemperatureValue),
+			Labels:    labels,
+			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos: 0},
 		}
 
-		labels = []*pb.PolledLabel{}
-		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.PressureUnit})
-		ptsd := &pb.PolledTimeSeriesDatum{
-			Metric:"pressure",
-			Value: float64(d.PressureValue),
-			Labels: labels,
-			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
+		labels = []*pb.TelemetryLabel{}
+		labels = append(labels, &pb.TelemetryLabel{Name: "unit", Value: d.PressureUnit})
+		ptsd := &pb.TelemetryDatum{
+			Metric:    "pressure",
+			Value:     float64(d.PressureValue),
+			Labels:    labels,
+			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos: 0},
 		}
 
-		labels = []*pb.PolledLabel{}
-		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.TemperatureBackupUnit})
-		tbtsd := &pb.PolledTimeSeriesDatum{
-			Metric:"temperature_backup",
-			Value: float64(d.TemperatureBackupValue),
-			Labels: labels,
-			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
+		labels = []*pb.TelemetryLabel{}
+		labels = append(labels, &pb.TelemetryLabel{Name: "unit", Value: d.TemperatureBackupUnit})
+		tbtsd := &pb.TelemetryDatum{
+			Metric:    "temperature_backup",
+			Value:     float64(d.TemperatureBackupValue),
+			Labels:    labels,
+			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos: 0},
 		}
 
-		labels = []*pb.PolledLabel{}
-		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.AltitudeUnit})
-		atsd := &pb.PolledTimeSeriesDatum{
-			Metric:"altitude",
-			Value: float64(d.AltitudeValue),
-			Labels: labels,
-			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
+		labels = []*pb.TelemetryLabel{}
+		labels = append(labels, &pb.TelemetryLabel{Name: "unit", Value: d.AltitudeUnit})
+		atsd := &pb.TelemetryDatum{
+			Metric:    "altitude",
+			Value:     float64(d.AltitudeValue),
+			Labels:    labels,
+			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos: 0},
 		}
 
-		labels = []*pb.PolledLabel{}
-		labels = append(labels, &pb.PolledLabel{Name: "unit", Value: d.IlluminanceUnit})
-		itsd := &pb.PolledTimeSeriesDatum{
-			Metric:"illuminance",
-			Value: float64(d.IlluminanceValue),
-			Labels: labels,
-			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos:   0, },
+		labels = []*pb.TelemetryLabel{}
+		labels = append(labels, &pb.TelemetryLabel{Name: "unit", Value: d.IlluminanceUnit})
+		itsd := &pb.TelemetryDatum{
+			Metric:    "illuminance",
+			Value:     float64(d.IlluminanceValue),
+			Labels:    labels,
+			Timestamp: &tspb.Timestamp{Seconds: d.Timestamp, Nanos: 0},
 		}
 
-		results := make([]*pb.PolledTimeSeriesDatum,6)
+		results := make([]*pb.TelemetryDatum, 6)
 		results[0] = htsd
 		results[1] = ttsd
 		results[2] = ptsd

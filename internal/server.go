@@ -52,7 +52,7 @@ func (s *TArduinoReaderServer) RunMainRuntimeLoop() {
 	log.Printf("gRPC server is running.")
 
 	// Block the main runtime loop for accepting and processing gRPC requests.
-	pb.RegisterTPollerServer(grpcServer, &TArduinoReaderServerImpl{
+	pb.RegisterTelemetryServer(grpcServer, &TArduinoReaderServerImpl{
 		// DEVELOPERS NOTE:
 		// We want to attach to every gRPC call the following variables...
 		arduinoReader: arduinoReader,

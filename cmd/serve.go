@@ -21,7 +21,7 @@ func init() {
 	serveCmd.Flags().StringVarP(&arduinoDevicePath, "arduino_path", "f", "/dev/cu.usbmodem14201", "The location of the connected arduino device on your computer.")
 	serveCmd.MarkFlagRequired("arduino_path")
 	serveCmd.Flags().StringVarP(&arduinoShield, "arduino_shield", "s", "SPARKFUN-DEV-13956", "The shield hardware attached to the arduino.")
-	serveCmd.MarkFlagRequired("arduino_path")
+	serveCmd.MarkFlagRequired("arduino_shield")
 
 	// The following are optional and will have defaults placed when missing.
 	serveCmd.Flags().IntVarP(&port, "port", "p", 50052, "The port to run this server on")

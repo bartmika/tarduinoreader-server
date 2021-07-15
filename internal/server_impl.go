@@ -3,16 +3,16 @@ package internal
 import (
 	"log"
 
-	"github.com/golang/protobuf/ptypes/empty"
 	pb "github.com/bartmika/tpoller-server/proto"
+	"github.com/golang/protobuf/ptypes/empty"
 )
 
 type TArduinoReaderServerImpl struct {
 	arduinoReader *ArduinoReader
-	pb.TPollerServer
+	pb.TelemetryServer
 }
 
-func (s *TArduinoReaderServerImpl) PollTimeSeriesData(in *empty.Empty, stream pb.TPoller_PollTimeSeriesDataServer) error {
+func (s *TArduinoReaderServerImpl) PollTelemeter(in *empty.Empty, stream pb.Telemetry_PollTelemeterServer) error {
 	data := s.arduinoReader.GetTimeSeriesData()
 	for _, datum := range data {
 		if err := stream.Send(datum); err != nil {
