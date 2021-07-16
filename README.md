@@ -82,10 +82,10 @@ go install github.com/bartmika/treader-server
 ```
 
 ## Usage
-Run our server continously in the foreground:
+Run our server continuously in the foreground:
 
 ```bash
-$GOBIN/telemetry-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956"
+$GOBIN/treader-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956"
 ```
 
 If you see a message saying ``gRPC server is running.`` then the application has been successfully started.
@@ -103,6 +103,12 @@ Flags:
   -s, --arduino_shield string   The shield hardware attached to the arduino. (default "SPARKFUN-DEV-13956")
   -h, --help                    help for serve
   -p, --port int                The port to run this server on (default 50052)
+```
+
+Example output of successful operation:
+
+```
+
 ```
 
 ## License
