@@ -73,6 +73,14 @@ The Arduino platform has a wonderful ecosystem of open-source hardware with libr
 
 No problem, you can help change that by contributing via [pull requeests](https://github.com/bartmika/treader-server/pulls) code for any sensors you think this project should have. If you are looking for a specific sensor, create a [request issue](https://github.com/bartmika/treader-server/issues).
 
+### Anyone using this?
+
+The following project is currently using this project:
+
+* [tpoller-server](https://github.com/bartmika/tpoller-server) - *Application written in Go which polls Time-series data at specific intervals and saves to persistent storage*
+
+If you want to add your own, feel free to make a [PR](https://github.com/bartmika/treader-server/pulls).
+
 ## Installation
 
 Install the application.
