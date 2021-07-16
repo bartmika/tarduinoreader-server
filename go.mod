@@ -1,4 +1,4 @@
-module github.com/bartmika/telemetry-server
+module github.com/bartmika/treader-server
 
 go 1.16
 

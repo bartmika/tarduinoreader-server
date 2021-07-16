@@ -1,33 +1,90 @@
-# telemetry-server
+# Time-Series Data Reader and gRPC Server
 
-## Overview
-
-The purpose of this server is to provide a remote procedure call (gRPC) interface over an external Arduino device(with a shield); more specifically, this application implements the [`Telemetry`](https://github.com/bartmika/tpoller-server/blob/master/proto/telemetry.proto) gRPC service definition so as long as you implement that protocol then you can access the time-series data.
+Read **time-series data**, using `serial communication over USB`, for your externally connected *Arduino device* and attached *Arduino shield*; afterwords, share your data through [`gRPC`](https://github.com/bartmika/tpoller-server/blob/master/proto/telemetry.proto).
 
 Currently this server only supports the following shield:
 
 * [SparkFun Weather Shield (DEV-13956)](https://github.com/sparkfun/Weather_Shield).
 
-## Prerequisites
+Turn your IoT sensors into a micro-service, access it over gRPC - focus on software don't worry about hardware.
 
-You must have the following installed before proceeding. If you are missing any one of these then you cannot begin.
+Real-world usage examples:
+![SparkFun Weather Shield](https://github.com/bartmika/sparkfunweathershield-arduino/blob/master/media/red_mulberries_germination_with_sparkfun_weather_shield.jpg?raw=true)
+*SparkFun Weather Shield monitoring dutifully a red mulberry seedling, the code is powered by this code repository* - read more via [this blog post](https://bartlomiejmika.com/post/2021/red-mulberry-growlog-2/).
 
-* ``Go 1.16.3``
+## Background
+### The Problem
+
+Imagine having purchased multiple measuring instruments for an IoT project, for example: pressure monitor, temperature probe, multi-sensor reader, etc. Each sensor provides different measured data - **Is it possible to create a simple *get data from device* interface to abstract all implantation detail and provide an easy-to-use API?**
+
+Imagine having built an application which can provide an easy-to-use API for multiple hardware sensors. **How do you make the API accessible between *one* or *many* applications running concurrently? How do you make this API accessible either *locally* and or *remotely*?**
+
+### The Solution
+
+`treader-server` tries to provide an easy-to-use interface for you to connect many interprocess communication requests either locally on your computer or remotely across the internet or your network.
+
+### What do I need?
+To run this code, you need the following:
+
+1. You need an Arduino device.
+2. You need to have the Arduino device running either one of the following code:
+
+  * [sparkfunweathershield-arduino](https://github.com/bartmika/sparkfunweathershield-arduino)
+3. The computer running this server needs to be connected to the Arduino device over `serial communication` USB port.
+4. The computer running this server needs to know the port address of your externally connected Arduino. Please find out what USB port your external device is connected on. Note: please replace ``/dev/cu.usbmodem14201`` with the value on your machine, a Raspberry Pi would most likely have the value ``/dev/ttyACM0``.
+
+### How does this work?
+
+This server starts by connecting to the Arduino device, warms up sensors if necessary and runs continuously waiting for you to make gRPC requests.
+
+When you make a gRPC request, this server will pull data from the external device and send you back a gRPC response. You do what you want with the data.
+
+### What is the gRPC service definition?
+
+Your application must implement the `Telemetry` service definition found [here](https://github.com/bartmika/tpoller-server/blob/master/proto/telemetry.proto). The service definition code snippet is as follows:
+
+```proto
+service Telemetry {
+    rpc PollTelemeter (google.protobuf.Empty) returns (stream TelemetryDatum) {}
+}
+
+message TelemetryLabel {
+    string name = 1;
+    string value = 2;
+}
+
+message TelemetryDatum {
+    string metric = 1;
+    repeated TelemetryLabel labels = 2;
+    double value = 3;
+    google.protobuf.Timestamp timestamp = 4;
+}
+```
+
+### Why did you choose Arduino?
+The Arduino platform has a wonderful ecosystem of open-source hardware with libraries. The goal is to take advantage of the libraries the hardware manufacturers wrote and not worry about the complicated implementation details; nor conflicting non-open source licensing agreements.
+
+### Why should I use it?
+* You want to focus on writing software or web-applications utilizing IoT sensors, not focus low-level hardware code.
+
+* You want to treat the sensor like a micro-service.
+
+* You want to use Golang.
+
+### You don't support too many sensors...
+
+No problem, you can help change that by contributing via [pull requeests](https://github.com/bartmika/treader-server/pulls) code for any sensors you think this project should have. If you are looking for a specific sensor, create a [request issue](https://github.com/bartmika/treader-server/issues).
 
 ## Installation
 
-1. Please visit the [sparkfunweathershield-arduino](https://github.com/bartmika/sparkfunweathershield-arduino) repository and setup the external device and connect it to your development machine.
+Install the application.
 
-2. Please find out what USB port your external device is connected on. Note: please replace ``/dev/cu.usbmodem14201`` with the value on your machine, a Raspberry Pi would most likely have the value ``/dev/ttyACM0``.
-
-3. Download the source code, build and install the application.
-
-    ```
-    GO111MODULE=on go get -u github.com/bartmika/telemetry-server
-    ```
+```
+go install github.com/bartmika/treader-server
+```
 
 ## Usage
-Run our application.
+Run our server continously in the foreground:
 
 ```bash
 $GOBIN/telemetry-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956"
@@ -35,36 +92,21 @@ $GOBIN/telemetry-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956"
 
 If you see a message saying ``gRPC server is running.`` then the application has been successfully started.
 
-## How does it work?
-This device runs continuously waiting for you to pull data from it.
+The sub-command details are as follows:
 
-When you pull data, it will send you a JSON formatted object with all the time series data.
+```text
+Run the gRPC server to allow other services to access the time-series data reader server
 
-To pull data, you must first connect to the **Arduino device** with a USB cable.
+Usage:
+  treader-server serve [flags]
 
-Once connected, you use **serial usb communication** to read data from the device and write commands to the device.
-
-Once your device recieves the JSON data, you do what you want with the data.
-
-## Why did you choose Arduino?
-The Arduino platform has a wonderful ecosystem of open-source hardware with libraries. Our goal is to take advantage of the libraries the hardware manufacturers wrote and not worry about the complicated implementation details.
-
-## How does the data output look like?
-When the device is ready to be used, you will see this output:
-
-```json
-{"status":"READY","runtime":2,"id":1,"sensors":["humidity","temperature","pressure","illuminance","soil"]}
+Flags:
+  -f, --arduino_path string     The location of the connected arduino device on your computer. (default "/dev/cu.usbmodem14201")
+  -s, --arduino_shield string   The shield hardware attached to the arduino. (default "SPARKFUN-DEV-13956")
+  -h, --help                    help for serve
+  -p, --port int                The port to run this server on (default 50052)
 ```
-
-When you poll the device for data, you will see this output:
-
-```json
-{"status":"RUNNING","runtime":24771,"id":2,"humidity":{"value":47.92456,"unit":"%","status":1,"error":""},"temperature_primary":{"value":80.47031,"unit":"F","status":1,"error":""},"pressure":{"value":0,"unit":"Pa","status":1,"error":""},"temperature_secondary":{"value":78.2375,"unit":"F","status":1,"error":""},"altitude":{"value":80440.25,"unit":"ft","status":1,"error":""},"illuminance":{"value":0.040305,"unit":"V","status":1,"error":""}}
-```
-
-## Why should I use it?
-This code is a easy to connect and read realtime time-series data using any language that supports serial communication over USB.
 
 ## License
 
-This application is licensed under the **BSD 3-Clause License**. See [LICENSE](LICENSE) for more information.
+[**BSD 3-Clause License**](LICENSE) © Bartlomiej Mika

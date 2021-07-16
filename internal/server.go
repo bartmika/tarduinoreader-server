@@ -10,7 +10,7 @@ import (
 	pb "github.com/bartmika/tpoller-server/proto"
 )
 
-type TelemetryServer struct {
+type TReaderServer struct {
 	port              int
 	arduinoDevicePath string
 	arduinoShield     string
@@ -18,8 +18,8 @@ type TelemetryServer struct {
 	grpcServer        *grpc.Server
 }
 
-func New(arduinoDevicePath string, arduinoShield string, port int) *TelemetryServer {
-	return &TelemetryServer{
+func New(arduinoDevicePath string, arduinoShield string, port int) *TReaderServer {
+	return &TReaderServer{
 		port:              port,
 		arduinoDevicePath: arduinoDevicePath,
 		arduinoShield:     arduinoShield,
@@ -30,7 +30,7 @@ func New(arduinoDevicePath string, arduinoShield string, port int) *TelemetrySer
 
 // Function will consume the main runtime loop and run the business logic
 // of the application.
-func (s *TelemetryServer) RunMainRuntimeLoop() {
+func (s *TReaderServer) RunMainRuntimeLoop() {
 	// Open a TCP server to the specified localhost and environment variable
 	// specified port number.
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", s.port))
@@ -52,7 +52,7 @@ func (s *TelemetryServer) RunMainRuntimeLoop() {
 	log.Printf("gRPC server is running.")
 
 	// Block the main runtime loop for accepting and processing gRPC requests.
-	pb.RegisterTelemetryServer(grpcServer, &TelemetryServerImpl{
+	pb.RegisterTelemetryServer(grpcServer, &TReaderServerImpl{
 		// DEVELOPERS NOTE:
 		// We want to attach to every gRPC call the following variables...
 		arduinoReader: arduinoReader,
@@ -64,7 +64,7 @@ func (s *TelemetryServer) RunMainRuntimeLoop() {
 
 // Function will tell the application to stop the main runtime loop when
 // the process has been finished.
-func (s *TelemetryServer) StopMainRuntimeLoop() {
+func (s *TReaderServer) StopMainRuntimeLoop() {
 	log.Printf("Starting graceful shutdown now...")
 
 	s.arduinoReader = nil

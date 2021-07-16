@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	server "github.com/bartmika/telemetry-server/internal"
+	server "github.com/bartmika/treader-server/internal"
 )
 
 var (
@@ -56,7 +56,7 @@ func doServe() {
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Run the gRPC server",
-	Long:  `Run the gRPC server to allow other services to access the telemetry server`,
+	Long:  `Run the gRPC server to allow other services to access the time-series data reader server`,
 	Run: func(cmd *cobra.Command, args []string) {
 		doServe()
 	},
