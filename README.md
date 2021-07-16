@@ -85,7 +85,7 @@ go install github.com/bartmika/treader-server
 Run our server continuously in the foreground:
 
 ```bash
-$GOBIN/treader-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956"
+$GOBIN/treader-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956" -p=50052
 ```
 
 If you see a message saying ``gRPC server is running.`` then the application has been successfully started.
@@ -105,10 +105,12 @@ Flags:
   -p, --port int                The port to run this server on (default 50052)
 ```
 
-Example output of successful operation:
+Example console output when successfully running the server:
 
 ```
-
+2021/07/15 22:00:16 READER: Attempting to connect Arduino device...
+2021/07/15 22:00:16 READER: Waiting for Arduino external sensors to warm up
+2021/07/15 22:00:26 gRPC server is running.
 ```
 
 ## License
