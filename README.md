@@ -88,12 +88,18 @@ Run our server continuously in the foreground:
 $GOBIN/treader-server serve -f="/dev/cu.usbmodem14401" -s="SPARKFUN-DEV-13956" -p=50052
 ```
 
-If you see a message saying ``gRPC server is running.`` then the application has been successfully started.
+If your console output looks as the following then the application has been successfully started. You are ready to use the service!
+
+```text
+2021/07/15 22:00:16 READER: Attempting to connect Arduino device...
+2021/07/15 22:00:16 READER: Waiting for Arduino external sensors to warm up
+2021/07/15 22:00:26 gRPC server is running.
+```
 
 The sub-command details are as follows:
 
 ```text
-Run the gRPC server to allow other services to access the time-series data reader server
+Run the gRPC server to allow other services to access the time-series data reader
 
 Usage:
   treader-server serve [flags]
@@ -103,14 +109,6 @@ Flags:
   -s, --arduino_shield string   The shield hardware attached to the arduino. (default "SPARKFUN-DEV-13956")
   -h, --help                    help for serve
   -p, --port int                The port to run this server on (default 50052)
-```
-
-Example console output when successfully running the server:
-
-```
-2021/07/15 22:00:16 READER: Attempting to connect Arduino device...
-2021/07/15 22:00:16 READER: Waiting for Arduino external sensors to warm up
-2021/07/15 22:00:26 gRPC server is running.
 ```
 
 ## License

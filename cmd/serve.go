@@ -56,7 +56,7 @@ func doServe() {
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Run the gRPC server",
-	Long:  `Run the gRPC server to allow other services to access the time-series data reader server`,
+	Long:  `Run the gRPC server to allow other services to access the time-series data reader`,
 	Run: func(cmd *cobra.Command, args []string) {
 		doServe()
 	},
