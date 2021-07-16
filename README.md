@@ -6,9 +6,7 @@ Currently this server only supports the following shield:
 
 * [SparkFun Weather Shield (DEV-13956)](https://github.com/sparkfun/Weather_Shield).
 
-Turn your IoT sensors into a micro-service, access it over gRPC - focus on software don't worry about hardware.
-
-Real-world usage examples:
+Example:
 ![SparkFun Weather Shield](https://github.com/bartmika/sparkfunweathershield-arduino/blob/master/media/red_mulberries_germination_with_sparkfun_weather_shield.jpg?raw=true)
 *SparkFun Weather Shield monitoring dutifully a red mulberry seedling, the code is powered by this code repository* - read more via [this blog post](https://bartlomiejmika.com/post/2021/red-mulberry-growlog-2/).
 
