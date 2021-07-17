@@ -40,7 +40,7 @@ func doGetData() {
 	defer cancel()
 
 	// Perform our gRPC request.
-	stream, err := client.PollTelemeter(ctx, &empty.Empty{})
+	stream, err := client.GetTimeSeriesData(ctx, &empty.Empty{})
 	if err != nil {
 		log.Fatalf("could not poll time series data: %v", err)
 	}

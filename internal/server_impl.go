@@ -7,12 +7,12 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 )
 
-type TReaderServerImpl struct {
+type TelemetryServerImpl struct {
 	arduinoReader *ArduinoReader
 	pb.TelemetryServer
 }
 
-func (s *TReaderServerImpl) PollTelemeter(in *empty.Empty, stream pb.Telemetry_PollTelemeterServer) error {
+func (s *TelemetryServerImpl) GetTimeSeriesData(in *empty.Empty, stream pb.Telemetry_GetTimeSeriesDataServer) error {
 	data := s.arduinoReader.GetTimeSeriesData()
 	for _, datum := range data {
 		if err := stream.Send(datum); err != nil {

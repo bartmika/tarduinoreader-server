@@ -41,9 +41,9 @@ When you make a gRPC request, this server will pull data from the external devic
 
 Your application must implement the `Telemetry` service definition found [here](https://github.com/bartmika/tpoller-server/blob/master/proto/telemetry.proto). The service definition code snippet is as follows:
 
-```proto
+```protobuf
 service Telemetry {
-    rpc PollTelemeter (google.protobuf.Empty) returns (stream TelemetryDatum) {}
+    rpc GetTimeSeriesData (google.protobuf.Empty) returns (stream TelemetryDatum) {}
 }
 
 message TelemetryLabel {
@@ -78,6 +78,7 @@ No problem, you can help change that by contributing via [pull requeests](https:
 The following project is currently using this project:
 
 * [tpoller-server](https://github.com/bartmika/tpoller-server) - *Application written in Go which polls Time-series data at specific intervals and saves to persistent storage*
+* [tstorage-server](https://github.com/bartmika/tstorage-server) - *Fast time-series data storage server accessible over gRPC*
 
 If you want to add your own, feel free to make a [PR](https://github.com/bartmika/treader-server/pulls).
 
@@ -85,8 +86,8 @@ If you want to add your own, feel free to make a [PR](https://github.com/bartmik
 
 Install the application.
 
-```
-go install github.com/bartmika/treader-server
+```bash
+go install github.com/bartmika/treader-server@latest
 ```
 
 ## Usage
