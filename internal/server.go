@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"sync"
 
 	"google.golang.org/grpc"
 
@@ -49,13 +50,14 @@ func (s *TReaderServer) RunMainRuntimeLoop() {
 	s.arduinoReader = arduinoReader
 
 	// For debugging purposes only.
-	log.Printf("gRPC server is running.")
+	log.Printf("gRPC server is running on port %v", s.port)
 
 	// Block the main runtime loop for accepting and processing gRPC requests.
 	pb.RegisterTelemetryServer(grpcServer, &TelemetryServerImpl{
 		// DEVELOPERS NOTE:
 		// We want to attach to every gRPC call the following variables...
 		arduinoReader: arduinoReader,
+		mu: &sync.Mutex{},
 	})
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
